@@ -19,3 +19,6 @@ def sign_up(request):
     else:
         form = SignUpForm()
     return render(request, 'sign_up.html', {'form': form})
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
