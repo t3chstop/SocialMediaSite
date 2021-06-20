@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.contrib.auth import login, authenticate
+from django.shortcuts import redirect, render
+from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm
 
 # Create your views here.
@@ -22,3 +22,7 @@ def sign_up(request):
 
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+def signout(request):
+    logout(request)
+    return redirect('/accounts/login')
