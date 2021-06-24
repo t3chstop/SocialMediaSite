@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = (
+    'accounts.backends.Caseinsensitivemodelbackend',
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+)
 
 # Application definition
 
