@@ -27,3 +27,11 @@ class RegistrationForm(UserCreationForm):
         except Exception as e:
             return display_name
         raise forms.ValidationError(f'Display name {display_name} is already in use')
+
+class SignUpForm(UserCreationForm):
+    context = {}
+    email = forms.EmailField(max_length=255, help_text='You will log in with this')
+    display_name = forms.CharField(max_length=300, help_text='This is how your friends will find you')
+    class Meta:
+        model = Account
+        fields = ['email', 'display_name', 'password1', 'password2']
