@@ -19,6 +19,7 @@ from accounts import views as Accountviews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Accountviews.Home, name='Home'),
-    path('register/', Accountviews.sign_up, name='Register')
+    path('', Accountviews.home, name='Home'),
+    path('register/', Accountviews.Register, name="register"),
+    path('dashboard/', Accountviews.dashboard, name="dashboard")
 ]
