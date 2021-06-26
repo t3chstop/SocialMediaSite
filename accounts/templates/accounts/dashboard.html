@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
+  Hi {{ user.display_name }}!
   <p><a href="/logout">Logout</a></p>
   
 {% else %}
