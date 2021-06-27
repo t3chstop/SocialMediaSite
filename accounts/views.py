@@ -1,12 +1,15 @@
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
-from .forms import RegistrationForm
+from .forms import RegistrationForm, LoginForm
 
 # Create your views here.
-def home(request):
-	return render(request, 'home.html')
 
-def Register(request):
+#Homepage
+def Home_view(request):
+	return render(request, 'accounts/home.html')
+
+def Register_view(request):
 	user=request.user
 	if user.is_authenticated:
 		return redirect('/dashboard')
@@ -23,9 +26,30 @@ def Register(request):
 		form = RegistrationForm()
 		return render(request, 'accounts/register.html', {'form': form})
 
-def dashboard(request):
+def Login_view(request):
+	context = {}
+	user = request.user
+	if user.is_authenticated:
+		return redirect('/dashboard')
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			email = request.POST['email']
+			password = request.POST['password']
+			user = authenticate(email=email, password=password)
+			if user:
+				login(request, user)
+				return redirect('/dashboard')
+		else:
+			return HttpResponse("Login failed. Please try again")
+	else:
+		form = LoginForm()
+		return render(request, 'accounts/login.html', {'form': form})
+
+
+def Dashboard_view(request):
 	return render(request, 'accounts/dashboard.html')
 
-def signout(request):
+def Logout_view(request):
 	logout(request)
-	return redirect('/accounts/login')
+	return redirect('/login')

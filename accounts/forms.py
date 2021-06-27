@@ -6,8 +6,8 @@ from django.forms import fields
 from .models import Account
 from django.contrib.auth import get_user_model  
 
-UserModel = get_user_model()  
 
+UserModel = get_user_model()  
 class RegistrationForm(UserCreationForm):
 	context = {}
 	email = forms.EmailField(max_length=255, help_text="You will log in with this")
@@ -18,5 +18,17 @@ class RegistrationForm(UserCreationForm):
 		model = UserModel
 		fields = ('email', 'display_name','password1', 'password2')
 
+class LoginForm(forms.Form):
+	email = forms.CharField(label='Email')
+	password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
+	class Meta:
+		model = Account
+		fields = ('email', 'password')
 
+	def clean(self):
+		if self.is_valid:
+			email = self.cleaned_data['email']
+			password = self.cleaned_data['password']
+			if not authenticate(email=email, password=password):
+				raise forms.ValidationError("Login Credentials not found")

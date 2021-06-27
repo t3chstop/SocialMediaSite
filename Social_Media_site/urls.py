@@ -18,8 +18,10 @@ from django.urls import path
 from accounts import views as Accountviews
 
 urlpatterns = [
+    path('', Accountviews.Home_view, name="Home"),
     path('admin/', admin.site.urls),
-    path('', Accountviews.home, name='Home'),
-    path('register/', Accountviews.Register, name="register"),
-    path('dashboard/', Accountviews.dashboard, name="dashboard")
+    path('dashboard/', Accountviews.Dashboard_view, name="dashboard"),
+    path('logout/', Accountviews.Logout_view, name="Logout"),
+    path('login/', Accountviews.Login_view, name="Login"),
+    path('register/', Accountviews.Register_view, name="register"),
 ]
