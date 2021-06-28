@@ -29,7 +29,6 @@ ALLOWED_HOSTS = []
 
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.Caseinsensitivemodelbackend',
-    #'django.contrib.auth.backends.AllowAllUsersModelBackend',
 )
 
 # Application definition
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'Friends',
+    'friendship'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'Social_Media_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['Login_Registration/templates/registration'],
+        'DIRS': ['Friends/templates', 'accounts/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

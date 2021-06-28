@@ -2,6 +2,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 from .forms import RegistrationForm, LoginForm
+from .models import Account
 
 # Create your views here.
 
@@ -53,3 +54,4 @@ def Dashboard_view(request):
 def Logout_view(request):
 	logout(request)
 	return redirect('/login')
+

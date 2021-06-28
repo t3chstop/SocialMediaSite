@@ -47,7 +47,6 @@ class Account(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     profile_picture = models.ImageField(max_length=255, upload_to=get_profile_picture_filepath, null=True, blank=True, default=get_default_profile_picture)
     hide_email = models.BooleanField(default=True)
-    friends = models.ManyToManyField("Account", blank=True)
 
 
     objects = CustomAccountManager()
