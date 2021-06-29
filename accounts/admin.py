@@ -8,7 +8,7 @@ from .models import Account
 class AccountAdmin(UserAdmin):
     list_display = ('email', 'display_name', 'time_joined', 'last_login', 'is_admin', 'is_staff')
     search_fields = ('email', 'display_name')
-    readonly_fields = ('id', 'time_joined', 'last_login')
+    readonly_fields = ('time_joined', 'last_login')
 
     filter_horizontal = ()
     filter_vertical = ()

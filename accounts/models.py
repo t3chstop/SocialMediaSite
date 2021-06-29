@@ -38,7 +38,7 @@ def get_default_profile_picture():
 # Create your models here.
 class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name='Email address', max_length=60, unique=True)
-    display_name = models.CharField(max_length=30, unique=True)
+    display_name = models.CharField(max_length=30, unique=True, primary_key=True)
     time_joined = models.DateTimeField(verbose_name='Time when account created', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='Last login', auto_now=True)
     is_admin = models.BooleanField(default=False)

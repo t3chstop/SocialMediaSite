@@ -12,11 +12,20 @@ def friendsearch_view(request):
     if request.method == 'POST':
         form = friendsearch_form(request.POST)
         display_name_from_form = form.data.get('display_name')
-        user_object_exists = Account.objects.filter(display_name=display_name_from_form).exists()
-        if user_object_exists:
-            return HttpResponse('User was located')
+        user_object = Account.objects.get(pk=display_name_from_form)
+        user_object_is_valid = False
+        if display_name_from_form != str(request.user):
+            if user_object:
+                user_object_is_valid = True
+        if user_object_is_valid:
+            Friend.objects.add_friend(
+                request.user,
+                user_object,
+                message=f'{request.user} sent you a friend request'
+            )
+            return HttpResponse("Friend Request sent")
         else:
-            return HttpResponse('User was not located')
+            return HttpResponse("User was not located")
     else:
         form = friendsearch_form()
         return render(request, 'Friends/friendsearch.html', {'form': form})
