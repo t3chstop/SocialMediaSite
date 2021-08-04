@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'Friends',
-    'friendship'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +58,7 @@ ROOT_URLCONF = 'Social_Media_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['Friends/templates', 'accounts/templates'],
+        'DIRS': ['Login_Registration/templates/registration'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
