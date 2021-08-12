@@ -26,5 +26,5 @@ urlpatterns = [
     path('login/', Account_views.Login_view, name="Login"),
     path('register/', Account_views.Register_view, name="register"),
     path('friendship/', include('friendship.urls')),
-    path(r'profile/(?P<display_name>[a-zA-Z0-9]+)$', Account_views.Profile),
+    path('profile/<display_name>/', Account_views.Profile)
 ]
