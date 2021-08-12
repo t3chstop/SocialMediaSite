@@ -51,6 +51,10 @@ def Login_view(request):
 def Dashboard_view(request):
 	return render(request, 'accounts/dashboard.html')
 
+def Profile(request, display_name):
+	user = Account.objects.get(display_name=display_name)
+	return render(request, 'accounts/profile.html', {"user":user})
+
 def Logout_view(request):
 	logout(request)
 	return redirect('/login')
