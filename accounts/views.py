@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm
 from .models import Account
 
@@ -23,6 +24,8 @@ def Register_view(request):
 			user = authenticate(email=email, password=raw_password)
 			login(request, user)
 			return render(request, 'accounts/dashboard.html')
+		else:
+			return HttpResponse("Sign Up failed. Please try again, and make sure your profile picture is within 360*360")
 	else:
 		form = RegistrationForm()
 		return render(request, 'accounts/register.html', {'form': form})
@@ -51,6 +54,7 @@ def Login_view(request):
 def Dashboard_view(request):
 	return render(request, 'accounts/dashboard.html')
 
+@login_required(login_url='/login/')
 def Profile(request, display_name):
 	user = Account.objects.get(display_name=display_name)
 	return render(request, 'accounts/profile.html', {"user":user})
