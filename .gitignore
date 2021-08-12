@@ -1,0 +1,6 @@
+accounts\__pycache__
+accounts/migrations/
+Friends\__pycache__
+Friends/migrations
+db.sqlite3
+Social_Media_site\__pycache__
