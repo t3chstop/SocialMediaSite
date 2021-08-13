@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from accounts import views as Account_views
 from Friends import views as Friends_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', Account_views.Home_view, name="Home"),
@@ -27,4 +29,4 @@ urlpatterns = [
     path('register/', Account_views.Register_view, name="register"),
     path('friendship/', include('friendship.urls')),
     path('profile/<display_name>/', Account_views.Profile)
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
