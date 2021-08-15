@@ -1,7 +1,7 @@
-accounts\__pycache__
+accounts/__pycache__
 accounts/migrations/
-Friends\__pycache__
+Friends/__pycache__
 Friends/migrations
 db.sqlite3
-Social_Media_site\__pycache__
-Social_Media_site\media\profile_pictures
+Social_Media_site/__pycache__
+Social_Media_site/media/profile_pictures
