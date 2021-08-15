@@ -15,6 +15,7 @@
     {% block content %}
     {% if user.is_authenticated %}
       <p>Hi {{ user.display_name }}!</p>
+      <a href="/profile/{{user.display_name}}/">your profile</a>
       <p><a href="/logout">Logout</a></p>
       
     {% else %}

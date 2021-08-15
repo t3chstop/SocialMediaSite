@@ -27,6 +27,7 @@ urlpatterns = [
     path('logout/', Account_views.Logout_view, name="Logout"),
     path('login/', Account_views.Login_view, name="Login"),
     path('register/', Account_views.Register_view, name="register"),
+    path('setup/', Account_views.Setup_view, name="register"),
     path('friendship/', include('friendship.urls')),
     path('profile/<display_name>/', Account_views.Profile)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

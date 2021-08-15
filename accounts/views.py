@@ -1,8 +1,9 @@
+from django.core.exceptions import RequestAborted
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, SetupForm
 from .models import Account
 
 # Create your views here.
@@ -16,19 +17,29 @@ def Register_view(request):
 	if user.is_authenticated:
 		return redirect('/dashboard')
 	if request.method == 'POST':
-		form = RegistrationForm(request.POST)
+		form = RegistrationForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()
 			email = form.cleaned_data.get('email')
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(email=email, password=raw_password)
 			login(request, user)
-			return render(request, 'accounts/dashboard.html')
-		else:
-			return HttpResponse("Sign Up failed. Please try again, and make sure your profile picture is within 360*360")
+			return redirect('/setup')
 	else:
 		form = RegistrationForm()
-		return render(request, 'accounts/register.html', {'form': form})
+	
+	return render(request, 'accounts/register.html', {'form': form})
+
+def Setup_view(request):
+	user = request.user
+	if request.method == 'POST':
+		form = SetupForm(request.POST, request.FILES, instance=user)
+		if form.is_valid():
+			form.save()
+			return redirect('/dashboard')	
+	else:
+		form = SetupForm()
+	return render(request, 'accounts/setup.html', {'form': form})
 
 def Login_view(request):
 	context = {}
