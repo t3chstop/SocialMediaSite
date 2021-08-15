@@ -1,12 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from django.db.models.base import Model
-from django.forms import fields, ModelForm
 from .models import Account
-from django.contrib.auth import get_user_model 
-from django.core.exceptions import ValidationError
-from django.core.files.images import get_image_dimensions
+from django.contrib.auth import get_user_model
+from PIL import Image
+import os, sys
 
 UserModel = get_user_model()  
 class RegistrationForm(UserCreationForm):
@@ -27,6 +25,20 @@ class SetupForm(forms.ModelForm):
     class Meta:
         model = UserModel
         fields = ('profile_picture', 'bio')
+
+    def clean(self):
+        size = (128, 128)
+        infile = self.data.get('profile_picture', False)
+        for infile in sys.argv[1:]:
+            outfile = os.path.splitext(infile)[0] + ".thumbnail"
+            if infile != outfile:
+                try:
+                    with Image.open(infile) as im:
+                        im.thumbnail(size)
+                        im.save(outfile, "JPEG")
+                except OSError:
+                    raise forms.ValidationError("Something went wrong with profile pic upload")
+
 
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')

@@ -73,4 +73,3 @@ def Profile(request, display_name):
 def Logout_view(request):
 	logout(request)
 	return redirect('/login')
-
