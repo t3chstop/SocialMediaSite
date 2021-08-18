@@ -26,20 +26,6 @@ class SetupForm(forms.ModelForm):
         model = UserModel
         fields = ('profile_picture', 'bio')
 
-    def clean(self):
-        size = (128, 128)
-        infile = self.data.get('profile_picture', False)
-        for infile in sys.argv[1:]:
-            outfile = os.path.splitext(infile)[0] + ".thumbnail"
-            if infile != outfile:
-                try:
-                    with Image.open(infile) as im:
-                        im.thumbnail(size)
-                        im.save(outfile, "JPEG")
-                except OSError:
-                    raise forms.ValidationError("Something went wrong with profile pic upload")
-
-
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)

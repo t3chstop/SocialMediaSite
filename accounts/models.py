@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models.aggregates import Max
@@ -49,6 +50,13 @@ class Account(AbstractBaseUser):
     profile_picture = models.ImageField(blank=True, upload_to='profile_pictures', null=True, default='profile_pictures/default.png')
     bio = models.TextField(blank=True, max_length=700)
     hide_email = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.profile_picture.path, 'r')
+        size = (128, 128)
+        img.thumbnail(size)
+        img.save(self.profile_picture.path)
 
 
     objects = CustomAccountManager()

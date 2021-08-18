@@ -5,6 +5,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm, SetupForm
 from .models import Account
+from PIL import Image
+import os, sys
 
 # Create your views here.
 
@@ -60,7 +62,6 @@ def Login_view(request):
 	else:
 		form = LoginForm()
 		return render(request, 'accounts/login.html', {'form': form})
-
 
 def Dashboard_view(request):
 	return render(request, 'accounts/dashboard.html')
