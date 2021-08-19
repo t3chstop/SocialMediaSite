@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
+from django.db import models
+from django.forms import fields
 from .models import Account
 from django.contrib.auth import get_user_model
 from PIL import Image
@@ -40,3 +42,17 @@ class LoginForm(forms.Form):
             password = self.cleaned_data['password']
             if not authenticate(email=email, password=password):
                 raise forms.ValidationError("Login Credentials not found")
+
+class UserSearchForm(forms.Form):
+    display_name = forms.CharField(label='Display Name')
+
+    class Meta:
+        model = Account
+        fields = ('display_name')
+
+    def clean(self):
+        entered_display_name = self.cleaned_data['display_name']
+        try:
+            Account.objects.get(display_name=entered_display_name)
+        except:
+            raise forms.ValidationError("User not found.")

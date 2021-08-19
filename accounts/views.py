@@ -3,10 +3,9 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, LoginForm, SetupForm
+from django.forms import forms
+from .forms import RegistrationForm, LoginForm, SetupForm, UserSearchForm
 from .models import Account
-from PIL import Image
-import os, sys
 
 # Create your views here.
 
@@ -64,12 +63,20 @@ def Login_view(request):
 		return render(request, 'accounts/login.html', {'form': form})
 
 def Dashboard_view(request):
-	return render(request, 'accounts/dashboard.html')
+	user = request.user
+	if request.method == 'POST':
+		form = UserSearchForm(request.POST)
+		if form.is_valid():
+			user_entered_displayname = request.POST['display_name']
+			return redirect(f'/profile/{user_entered_displayname}')
+	else:
+		form = UserSearchForm()
+	return render(request, 'accounts/dashboard.html', {'form': form})
 
 @login_required(login_url='/login/')
 def Profile(request, display_name):
-	user = Account.objects.get(display_name=display_name)
-	return render(request, 'accounts/profile.html', {"user":user})
+	requested_user = Account.objects.get(display_name=display_name)
+	return render(request, 'accounts/profile.html', {"requested_user":requested_user})
 
 def Logout_view(request):
 	logout(request)

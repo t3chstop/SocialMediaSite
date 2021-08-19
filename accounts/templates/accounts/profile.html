@@ -11,9 +11,8 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <h2>{{ user.display_name }}</h2>
-    <h2>{{ user.email }}</h2>
-    <img src="{{request.user.profile_picture.url}}" width="240">
+    <h2>{{ requested_user.display_name }}</h2>
+    <img src="{{requested_user.profile_picture.url}}" width="240">
     <h2>{{user.bio}}</h2>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
