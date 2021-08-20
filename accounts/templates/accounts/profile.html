@@ -13,7 +13,18 @@
   <body>
     <h2>{{ requested_user.display_name }}</h2>
     <img src="{{requested_user.profile_picture.url}}" width="240">
-    <h2>{{user.bio}}</h2>
+    <h2>{{ requested_user.bio }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {%if viewing_friend%}
+      <button type="submit">Remove Friend</button>
+      {%elif viewing_self%}
+      <a href="/dashboard">Edit Profile</a>
+      {%else%}
+      <button type="submit">Send friend request</button>
+      {%endif%}
+    </form>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
