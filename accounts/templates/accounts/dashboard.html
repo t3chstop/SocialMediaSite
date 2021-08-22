@@ -24,6 +24,11 @@
         {{ form.as_p }}
         <button type="submit">Search for User</button>
       </form>
+      <p>
+        {% for i in pending_friend_requests %}
+            {{ i }}
+        {% endfor %}
+      </p>
     {% else %}
       <p>You are not logged in</p>
       <a href="{% url 'login' %}">Log In</a>
