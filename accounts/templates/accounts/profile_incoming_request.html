@@ -8,23 +8,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>{{viewing.display_name}}</title>
   </head>
   <body>
-    <h2>{{ requested_user.display_name }}</h2>
+    <h2>{{ viewing.display_name }}</h2>
     <img src="{{requested_user.profile_picture.url}}" width="240">
-    <h2>{{ requested_user.bio }}</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      {%if viewing_friend%}
-      <button type="submit">Remove Friend</button>
-      {%elif viewing_self%}
-      <a href="/dashboard">Edit Profile</a>
-      {%else%}
-      <button type="submit">Send friend request</button>
-      {%endif%}
-    </form>
+    <h2>{{ viewing.bio }}</h2>
+    <h4>Friend Request sent</h4>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

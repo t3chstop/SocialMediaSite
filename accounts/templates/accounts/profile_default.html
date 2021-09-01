@@ -8,33 +8,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>Dashboard</title>
+    <title>{{viewing.display_name}}</title>
   </head>
   <body>
-    {% block title %}Home{% endblock %}
-    {% block content %}
-    {% if user.is_authenticated %}
-
-
-      <p>Hi {{ user.display_name }}!</p>
-      <a href="/profile/{{user.display_name}}/">your profile</a>
-      <p><a href="/logout">Logout</a></p>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Search for User</button>
-      </form>
-      <p>
-        {% for i in pending_friend_requests %}
-            <a href="/profile/{{ i }}">{{ i }}</a>
-        {% endfor %}
-      </p>
-    {% else %}
-      <p>You are not logged in</p>
-      <a href="{% url 'login' %}">Log In</a>
-    {% endif %}
-    {% endblock %}
-
+    <h2>{{ requested_user.display_name }}</h2>
+    <img src="{{requested_user.profile_picture.url}}" width="240">
+    <h2>{{ requested_user.bio }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Submit</button>
+    </form>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -3,12 +3,15 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from friendship.models import Friend, Follow, Block # type: ignore
+from friendship.models import Friend, Follow, Block  # type: ignore
+from friendship.models import FriendshipRequest # type: ignore
 from .forms import RegistrationForm, LoginForm, SetupForm, UserSearchForm
 from .models import Account
-from Friends.forms import AddFriendForm, UnfriendForm
+from Friends.forms import AddFriendForm, UnfriendForm, AcceptFriendRequestForm
 
 # Create your views here.
+
+#TODO: F
 
 #Homepage
 def Home_view(request):
@@ -74,9 +77,9 @@ def Dashboard_view(request):
 		form = UserSearchForm()
 	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests})
 
+"""
 @login_required(login_url='/login/')
 def Profile(request, display_name):
-
 	#requested_user is the user whose profile is being viewed.
 	requested_user = Account.objects.get(display_name=display_name)
 	viewing_self = requested_user==request.user
@@ -92,14 +95,69 @@ def Profile(request, display_name):
 		else:
 			form = UnfriendForm()
 	else:
+		try :
+			request_exists=True
+			FriendshipRequest.objects.get(from_user=request.user, to_user=requested_user)
+			if request.method == 'POST':
+				form = AcceptFriendRequestForm(request.POST)
+				if form.is_valid():
+					form.save(sender=requested_user, recipient=request.user)
+					return redirect('/dashboard')
+			else:
+				form = AcceptFriendRequestForm()
+		except:
+			if request_exists:
+				return render(request, 'accounts/profile.html', {"requested_user":requested_user, "form":form, "viewing_friend":viewing_friend, "viewing_self":viewing_self})
+			if request.method == 'POST':
+				form = AddFriendForm(request.POST)
+				if form.is_valid():
+					return HttpResponse("it did this stupid shit")
+			else:
+				form = AddFriendForm()
+	return render(request, 'accounts/profile.html', {"requested_user":requested_user, "form":form, "viewing_friend":viewing_friend, "viewing_self":viewing_self})
+"""
+
+@login_required
+def Profile(request, display_name):
+	viewing = Account.objects.get(display_name=display_name) #This is the user who's profile is being shown
+	viewing_self = viewing == request.user
+	viewing_friend = Friend.objects.are_friends(request.user, viewing)
+	if viewing_self: #The form will be the form to unfriend the user.
+		return render(request, 'accounts/profile_self.html', {"viewing":viewing})
+	elif viewing_friend:
 		if request.method == 'POST':
-			form = AddFriendForm(request.POST)
-			if form.is_valid():
-				Friend.objects.add_friend(request.user, requested_user)
+			form = UnfriendForm(request.POST)
+			if form.is_valid:
+				Friend.objects.remove_friend(request.user, viewing)
 				return redirect('/dashboard')
 		else:
-			form = AddFriendForm()
-	return render(request, 'accounts/profile.html', {"requested_user":requested_user, "form":form, "viewing_friend":viewing_friend, "viewing_self":viewing_self})
+			form = UnfriendForm()
+		return render(request, 'accounts/profile_viewing_friend.html', {"viewing":viewing})
+	sent_request = False
+	incoming_request = False
+	#Logic to determine if a friend request has been sent and if so from who
+	try:
+		FriendshipRequest.objects.get(sender=viewing, recipient=request.user)
+		incoming_request = True
+	except:
+		incoming_request = False
+	try:
+		FriendshipRequest.objects.get(sender=request.user, recipient=viewing)
+		sent_request = True
+	except:
+		sent_request = False
+	if sent_request:
+		return render(request, 'accounts/profile_sent_request.html', {"viewing":viewing})
+	if incoming_request:
+		if request.method == 'POST':
+			form = AcceptFriendRequestForm(request.POST)
+			if form.is_valid:
+				friend_request = FriendshipRequest.objects.get(from_user=viewing, to_user=request.user)
+				friend_request.accept()
+				return redirect('/dashboard')
+		else:
+			form = UnfriendForm()
+		return render(request, 'accounts/profile_incoming_request.html' ,{"viewing":viewing})
 
 def Logout_view(request):
 	logout(request)
