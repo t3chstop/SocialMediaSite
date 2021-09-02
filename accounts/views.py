@@ -78,45 +78,6 @@ def Dashboard_view(request):
 		form = UserSearchForm()
 	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests})
 
-"""
-@login_required(login_url='/login/')
-def Profile(request, display_name):
-	#requested_user is the user whose profile is being viewed.
-	requested_user = Account.objects.get(display_name=display_name)
-	viewing_self = requested_user==request.user
-	viewing_friend = Friend.objects.are_friends(request.user, requested_user)
-	if viewing_self:
-		return render(request, 'accounts/profile.html', {"requested_user":requested_user})
-	elif viewing_friend:
-		if request.method == 'POST':
-			form = UnfriendForm(request.POST)
-			if form.is_valid():
-				Friend.objects.remove_friend(request.user, requested_user)
-				return redirect(f'/profile/{display_name}')
-		else:
-			form = UnfriendForm()
-	else:
-		try :
-			request_exists=True
-			FriendshipRequest.objects.get(from_user=request.user, to_user=requested_user)
-			if request.method == 'POST':
-				form = AcceptFriendRequestForm(request.POST)
-				if form.is_valid():
-					form.save(sender=requested_user, recipient=request.user)
-					return redirect('/dashboard')
-			else:
-				form = AcceptFriendRequestForm()
-		except:
-			if request_exists:
-				return render(request, 'accounts/profile.html', {"requested_user":requested_user, "form":form, "viewing_friend":viewing_friend, "viewing_self":viewing_self})
-			if request.method == 'POST':
-				form = AddFriendForm(request.POST)
-				if form.is_valid():
-					return HttpResponse("it did this stupid shit")
-			else:
-				form = AddFriendForm()
-	return render(request, 'accounts/profile.html', {"requested_user":requested_user, "form":form, "viewing_friend":viewing_friend, "viewing_self":viewing_self})
-"""
 
 @login_required
 def Profile(request, display_name): 
