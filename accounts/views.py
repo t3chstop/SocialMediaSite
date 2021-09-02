@@ -1,4 +1,5 @@
 from django.core.exceptions import RequestAborted, ViewDoesNotExist
+from django.forms.widgets import MediaDefiningClass
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
@@ -118,7 +119,7 @@ def Profile(request, display_name):
 """
 
 @login_required
-def Profile(request, display_name):
+def Profile(request, display_name): 
 	viewing = Account.objects.get(display_name=display_name) #This is the user who's profile is being shown
 	viewing_self = viewing == request.user
 	viewing_friend = Friend.objects.are_friends(request.user, viewing)
@@ -136,19 +137,9 @@ def Profile(request, display_name):
 	sent_request = False
 	incoming_request = False
 	#Logic to determine if a friend request has been sent and if so from who
-	try:
-		FriendshipRequest.objects.get(sender=viewing, recipient=request.user)
-		incoming_request = True
-	except:
-		incoming_request = False
-	try:
-		FriendshipRequest.objects.get(sender=request.user, recipient=viewing)
-		sent_request = True
-	except:
-		sent_request = False
-	if sent_request:
+	if FriendshipRequest.objects.has_request(from_user=request.user, to_user=viewing):
 		return render(request, 'accounts/profile_sent_request.html', {"viewing":viewing})
-	if incoming_request:
+	if FriendshipRequest.objects.has_request(from_user=viewing, to_user=request.user):
 		if request.method == 'POST':
 			form = AcceptFriendRequestForm(request.POST)
 			if form.is_valid:
@@ -156,8 +147,16 @@ def Profile(request, display_name):
 				friend_request.accept()
 				return redirect('/dashboard')
 		else:
-			form = UnfriendForm()
-		return render(request, 'accounts/profile_incoming_request.html' ,{"viewing":viewing})
+			form = AcceptFriendRequestForm()
+		return render(request, 'accounts/profile_incoming_request.html', {"viewing":viewing, "form":form})
+	if request.method == 'POST':
+		form = AddFriendForm(request.POST)
+		if form.is_valid:
+			Friend.objects.add_friend(request.user, viewing, message=f"{request.user} sent you a friend request.")
+			return redirect('/dashboard')
+	else:
+		form = AddFriendForm()
+	return render(request, 'accounts/profile_default.html', {"form":form, "viewing":viewing})
 
 def Logout_view(request):
 	logout(request)

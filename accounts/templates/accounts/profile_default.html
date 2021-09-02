@@ -11,13 +11,13 @@
     <title>{{viewing.display_name}}</title>
   </head>
   <body>
-    <h2>{{ requested_user.display_name }}</h2>
+    <h2>{{ viewing.display_name }}</h2>
     <img src="{{requested_user.profile_picture.url}}" width="240">
-    <h2>{{ requested_user.bio }}</h2>
+    <h2>{{ viewing.bio }}</h2>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit">Submit</button>
+      <button type="submit">Send Friend Request</button>
     </form>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
