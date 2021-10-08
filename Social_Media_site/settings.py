@@ -71,7 +71,7 @@ ROOT_URLCONF = 'Social_Media_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['Login_Registration/templates/registration'],
+        'DIRS': ['accounts/templates/accounts'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
