@@ -1,0 +1,19 @@
+/*
+Colors:
+#17252A : Dark grey/black
+#2B7A78 : Darker turquoise
+#3AAFA9 : Lighter turquoise
+#DEF2F1 : Almost white
+#FEFFFF: All white
+*/
+body {
+    background-color: #17252A;
+}
+h1 {
+    color: #FEFFFF;
+    font-family: 'Montserrat', sans-serif;
+}
+p {
+    color: #FEFFFF;
+    font-family: 'Montserrat', sans-serif;
+}
