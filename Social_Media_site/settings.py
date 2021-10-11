@@ -43,8 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'Friends',
-    'friendship',
+    'channels',
+    'chats',
 ]
+
+ASGI_APPLICATION = "Social_Media_site.asgi.application"
 
 
 DJANGO_CROPPER_IMAGE_SETTINGS ={
