@@ -16,12 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import views as Account_views
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('', Account_views.Home_view, name="Home"),
-    path('admin/', admin.site.urls),
+    path(r'admin/', admin.site.urls),
     path('dashboard/', Account_views.Dashboard_view, name="dashboard"),
     path('logout/', Account_views.Logout_view, name="Logout"),
     path('login/', Account_views.Login_view, name="Login"),
@@ -29,4 +27,4 @@ urlpatterns = [
     path('setup/', Account_views.Setup_view, name="setup"),
     path('friendship/', include('friendship.urls')),
     path('profile/<display_name>/', Account_views.Profile),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
