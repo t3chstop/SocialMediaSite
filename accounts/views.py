@@ -10,10 +10,6 @@ from .forms import RegistrationForm, LoginForm, SetupForm, UserSearchForm
 from .models import Account
 from Friends.forms import AddFriendForm, UnfriendForm, AcceptFriendRequestForm
 
-# Create your views here.
-
-#TODO: F
-
 #Homepage
 def Home_view(request):
 	return render(request, 'accounts/home.html')
