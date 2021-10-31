@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'Friends',
+    'friendship',
     'channels',
     'chats',
 ]
@@ -74,7 +75,7 @@ ROOT_URLCONF = 'Social_Media_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['accounts/templates/accounts'],
+        'DIRS': ['accounts/templates/accounts', 'chats/templates/chats'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -13,7 +13,7 @@ Shadow of Light Blue: #EEFBFB
 body {
     background-color: #12232E;
 }
-h1 {
+h2 {
     color: white;
     font-weight: bolder;
     font-family: 'Montserrat', sans-serif;
@@ -21,4 +21,7 @@ h1 {
 p {
     color: #FEFFFF;
     font-family: 'Montserrat', sans-serif;
+}
+li {
+    color: white;
 }
