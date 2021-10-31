@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import views as Account_views
-from chats import views as chatviews
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,6 +29,4 @@ urlpatterns = [
     path('setup/', Account_views.Setup_view, name="setup"),
     path('friendship/', include('friendship.urls')),
     path('profile/<display_name>/', Account_views.Profile),
-    path('chat/', chatviews.index),
-     path('chat/<str:room_name>/', chatviews.room, name='room'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'Friends',
     'friendship',
     'channels',
-    'chats',
 ]
 
 ASGI_APPLICATION = "Social_Media_site.asgi.application"
