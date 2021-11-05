@@ -26,6 +26,7 @@ SECRET_KEY = '-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#Add domain when launching to production
 ALLOWED_HOSTS = []
 
 AUTHENTICATION_BACKENDS = (
@@ -49,6 +50,15 @@ INSTALLED_APPS = [
 ]
 
 ASGI_APPLICATION = "Social_Media_site.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 DJANGO_CROPPER_IMAGE_SETTINGS ={

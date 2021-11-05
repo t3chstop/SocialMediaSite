@@ -74,7 +74,8 @@ def Dashboard_view(request):
 		form = UserSearchForm()
 	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests})
 
-
+#This view must determine who's profile to display. I am using a slow and inefficient method right now, so a cleaner implementation
+#needs to be added before production.
 @login_required
 def Profile(request, display_name): 
 	viewing = Account.objects.get(display_name=display_name) #This is the user who's profile is being shown
@@ -91,10 +92,8 @@ def Profile(request, display_name):
 		else:
 			form = UnfriendForm()
 		return render(request, 'accounts/profile_viewing_friend.html', {"viewing":viewing})
-	sent_request = False
-	incoming_request = False
 	#Logic to determine if a friend request has been sent and if so from who
-	if FriendshipRequest.objects.has_request(from_user=request.user, to_user=viewing):
+	if FriendshipRequest.objects.has_request(from_user=request.user, to_user=viewing): #I added this method to the installation of the package. A better implementation should be used in production
 		return render(request, 'accounts/profile_sent_request.html', {"viewing":viewing})
 	if FriendshipRequest.objects.has_request(from_user=viewing, to_user=request.user):
 		if request.method == 'POST':
