@@ -15,6 +15,7 @@
                   <div>
                     <div class="box">     
                       <div id="chat-messages">
+                        {% for m in messages %}<b> {{ m.displayName }}</b>: {{ m.content }}<br>{% endfor %}
                       </div>
                     </div>
       
@@ -70,7 +71,7 @@
             const data = JSON.parse(e.data);
     
             if (data.message) {
-                document.querySelector('#chat-messages').innerHTML += ('<br>' + data.displayName + ': ' + data.message + '');
+                document.querySelector('#chat-messages').innerHTML += ('<br>' + '<b>' + data.displayName + '</b>' + ': ' + data.message + '');
             } else {
                 alert('The message was empty!')
             }
