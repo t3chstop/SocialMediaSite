@@ -24,7 +24,7 @@ def room(request, room_name):
     })
 
 def rooms(request):
-    rooms = ChatRoom.objects.filter(account = request.user)
+    rooms = ChatRoom.objects.filter(users__display_name=request.user.display_name)
     return render(request, 'chat/rooms.html', {
         'rooms' : rooms,
     })

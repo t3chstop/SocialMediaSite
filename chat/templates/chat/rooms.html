@@ -8,6 +8,6 @@
     </head>
 
     <body>
-        {% for r in rooms %} <a href="/chat/{{r.title}}">{{r.title}}</a> {% endfor %}
+        <p>{% for r in rooms %} <a href="/chat/{{r.title}}">{{r.title}}</a> <br>{% endfor %}</p>
     </body>
 </html>

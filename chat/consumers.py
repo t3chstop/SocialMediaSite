@@ -7,11 +7,7 @@ from accounts.models import Account
 
 """
 TO DO: 
--Link chatrooms to user model with many to many field
--Add a page that shows all the direct message groups
--Automatically generate a room between friends
--Make a notification system(doesn't have to be socketed) that alerts of new messages from
-the dashboard
+-Automatically generate chatrooms between friends when the friendship is created
 """
 
 

@@ -1,14 +1,13 @@
-from django.core.exceptions import RequestAborted, ViewDoesNotExist
-from django.forms.widgets import MediaDefiningClass
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from friendship.models import Friend, Follow, Block  # type: ignore
+from friendship.models import Friend  # type: ignore
 from friendship.models import FriendshipRequest # type: ignore
 from .forms import RegistrationForm, LoginForm, SetupForm, UserSearchForm
 from .models import Account
 from Friends.forms import AddFriendForm, UnfriendForm, AcceptFriendRequestForm
+from chat.models import ChatRoom
 
 #Homepage
 def Home_view(request):
@@ -102,6 +101,10 @@ def Profile(request, display_name):
 			if form.is_valid:
 				friend_request = FriendshipRequest.objects.get(from_user=viewing, to_user=request.user)
 				friend_request.accept()
+				#Auto generate chatroom between users
+				room = ChatRoom(title = (viewing.display_name + '-' + request.user.display_name))
+				room.save()
+				room.users.add(request.user, viewing)
 				return redirect('/dashboard')
 		else:
 			form = AcceptFriendRequestForm()
