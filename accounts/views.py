@@ -12,7 +12,7 @@ from Friends.forms import AddFriendForm, UnfriendForm, AcceptFriendRequestForm
 
 #Homepage
 def Home_view(request):
-	return render(request, 'accounts/home.html')
+	return render(request, 'accounts/index.html')
 
 def Register_view(request):
 	user=request.user
@@ -63,6 +63,7 @@ def Login_view(request):
 		form = LoginForm()
 		return render(request, 'accounts/login.html', {'form': form})
 
+@login_required
 def Dashboard_view(request):
 	pending_friend_requests = Friend.objects.unrejected_requests(user=request.user)
 	if request.method == 'POST':

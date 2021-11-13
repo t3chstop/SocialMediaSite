@@ -1,7 +1,7 @@
 from PIL import Image
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db.models.aggregates import Max
+from chat.models import ChatRoom
 
 class CustomAccountManager(BaseUserManager):  #Account manager
     def create_user(self, email, display_name, password=None):
@@ -50,6 +50,7 @@ class Account(AbstractBaseUser):
     profile_picture = models.ImageField(blank=True, upload_to='profile_pictures', null=True, default=r'profile_pictures/default.png')
     bio = models.TextField(blank=True, max_length=700)
     hide_email = models.BooleanField(default=True)
+    chatRooms = models.ManyToManyField(ChatRoom, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

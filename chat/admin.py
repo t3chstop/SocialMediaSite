@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.core.cache import cache
 
 
-from chat.models import Message
+from chat.models import Message, ChatRoom
 
 class CachingPaginator(Paginator):
     def _get_count(self):
@@ -26,15 +26,24 @@ class CachingPaginator(Paginator):
     count = property(_get_count)
 
 class MessageAdmin(admin.ModelAdmin):
-    list_filter = ['room',  'displayName', "timestamp"]
-    list_display = ['room',  'displayName', 'content',"timestamp"]
+    list_filter = ['room',  'user', "timestamp"]
+    list_display = ['room',  'user', 'content',"timestamp"]
     search_fields = ['room', 'display_name','content']
-    readonly_fields = ["displayName", "room", "timestamp"]
+    readonly_fields = ["user", "room", "timestamp"]
 
     show_full_result_count = False
     paginator = CachingPaginator
 
     class Meta:
         model = Message
+
+class chatRoomAdmin(admin.ModelAdmin):
+    list_display = ['title']
+    search_fields = ['title']
+    
+    class Meta:
+        model = ChatRoom
+
+admin.site.register(ChatRoom, chatRoomAdmin)
 
 admin.site.register(Message, MessageAdmin)

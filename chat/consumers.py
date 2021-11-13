@@ -2,16 +2,16 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Message
 from asgiref.sync import sync_to_async
+from django.conf import settings
+from accounts.models import Account
 
 """
 TO DO: 
--make an entrance page that asks for a room to enter. It only needs to ask for the name, 
-and should pick up the user who sent it based on who is logged in. Login required for this
-view.
--Create a room page that has an input section for a message(dw about images for now) and
-sends this information to the backend multiple times
--Store messages in database, so that previous messages appear in the chatroom
-
+-Link chatrooms to user model with many to many field
+-Add a page that shows all the direct message groups
+-Automatically generate a room between friends
+-Make a notification system(doesn't have to be socketed) that alerts of new messages from
+the dashboard
 """
 
 
@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def disconnect(self, close_code):
+    async def disconnect(self):
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -41,9 +41,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         displayName = text_data_json['displayName']
+        user = await sync_to_async(Account.objects.get, thread_sensitive=False)(display_name=displayName)
         roomName = text_data_json['room']
 
-        await self.save_message(displayName, roomName, message)
+        await self.save_message(user, roomName, message)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -69,5 +70,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     @sync_to_async
-    def save_message(self, displayName, room, message):
-        Message.objects.create(displayName=displayName, room=room, content=message)
+    def save_message(self, user, room, message):
+        Message.objects.create(user=user, room=room, content=message)

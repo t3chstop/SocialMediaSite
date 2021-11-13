@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts import views as accountViews
+from chat import views as chatViews
 
 urlpatterns = [
     path('', accountViews.Home_view, name="Home"),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('setup/', accountViews.Setup_view, name="setup"),
     path('profile/<display_name>/', accountViews.Profile),
     path('chat/', include('chat.urls')),
+    path('rooms/', chatViews.rooms),
 ]
