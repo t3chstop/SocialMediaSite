@@ -102,7 +102,7 @@ def Profile(request, display_name):
 				friend_request = FriendshipRequest.objects.get(from_user=viewing, to_user=request.user)
 				friend_request.accept()
 				#Auto generate chatroom between users
-				room = ChatRoom(title = (viewing.display_name + '-' + request.user.display_name))
+				room = ChatRoom(title = (viewing.display_name + 'to' + request.user.display_name))
 				room.save()
 				room.users.add(request.user, viewing)
 				return redirect('/dashboard')

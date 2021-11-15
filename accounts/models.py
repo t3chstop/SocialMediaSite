@@ -25,16 +25,16 @@ class CustomAccountManager(BaseUserManager):  #Account manager
             password=password
         )
         user.is_admin = True
-        user.is_staff = True
+        useris_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
 
-def get_profile_picture_filepath(self):
-    return f'profile_pictures/{self.pk}/{"profile_picture.jpg"}'
+    def get_profile_picture_filepath(self):
+        return f'profile_pictures/{self.pk}/{"profile_picture.jpg"}'
 
-def get_default_profile_picture():
-    return "static_cdn\defaults\profilepic360by360.jpg"
+    def get_default_profile_picture():
+        return "static_cdn\defaults\profilepic360by360.jpg"
 
 
 # Create your models here.
@@ -71,8 +71,13 @@ class Account(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
+    @property
+    def get_relative_image_path(self):   
+        return '/static' + self.profile_picture.url
+
     def has_module_perms(self, app_label):
         return True
 
     def get_profile_picture_filename(self):
         return str(self.profile_picture)[str(self.profile_picture).index(f'profile_pictures/{self.pk}/'):]
+        

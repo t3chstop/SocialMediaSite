@@ -61,15 +61,6 @@ CHANNEL_LAYERS = {
 }
 
 
-DJANGO_CROPPER_IMAGE_SETTINGS ={
-    'EXCLUDE_CROPPERJS':False, #can excude cropperjs js and css files
-    'CROPPERJS_STATIC_JS':'django_cropper_image/js/cropper.min.js', # can change cropper js file
-    'CROPPERJS_STATIC_CSS':'django_cropper_image/css/cropper.min.css',# can change cropper css file
-    'CUSTOM_STATIC_JS':'django_cropper_image/js/image_cropper.js', # can change django_cropper_image module custom js
-    'CUSTOM_STATIC_CSS':'django_cropper_image/css/image_cropper.css', # can change django_cropper_image module custom css
-    'TEMPLATES':'django_cropper_image/image_cropper_input.html', # can change django_cropper_image module template files
-}
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,7 +141,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/STATIC/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 

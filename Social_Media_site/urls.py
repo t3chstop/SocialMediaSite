@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from accounts import views as accountViews
 from chat import views as chatViews
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', accountViews.Home_view, name="Home"),
@@ -29,4 +31,4 @@ urlpatterns = [
     path('profile/<display_name>/', accountViews.Profile),
     path('chat/', include('chat.urls')),
     path('rooms/', chatViews.rooms),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

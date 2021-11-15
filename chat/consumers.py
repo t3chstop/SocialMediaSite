@@ -2,7 +2,6 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Message
 from asgiref.sync import sync_to_async
-from django.conf import settings
 from accounts.models import Account
 
 """
@@ -25,7 +24,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def disconnect(self):
+    async def disconnect(self, messagecode):
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -37,7 +36,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         displayName = text_data_json['displayName']
-        user = await sync_to_async(Account.objects.get, thread_sensitive=False)(display_name=displayName)
+        user = self.scope['user']
+        profile_picture_path = user.profile_picture.url
         roomName = text_data_json['room']
 
         await self.save_message(user, roomName, message)
@@ -49,7 +49,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'displayName' : displayName,
-                'roomName' : roomName
+                'roomName' : roomName,
+                'profile_picture_url' : profile_picture_path,
             }
         )
 
@@ -57,12 +58,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         displayName = event['displayName']
+        user = self.scope['user']
+        profile_picture_path = user.profile_picture.url
+        print(profile_picture_path)
         roomName = event['roomName']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
             'displayName' : displayName,
-            'roomName' : roomName
+            'roomName' : roomName,
+            'profile_picture_url' : profile_picture_path,
         }))
 
     @sync_to_async
