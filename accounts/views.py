@@ -43,7 +43,6 @@ def Setup_view(request):
 	return render(request, 'accounts/setup.html', {'form': form})
 
 def Login_view(request):
-	context = {}
 	user = request.user
 	if user.is_authenticated:
 		return redirect('/dashboard')
@@ -87,7 +86,7 @@ def Profile(request, display_name):
 		if request.method == 'POST':
 			form = UnfriendForm(request.POST)
 			if form.is_valid:
-				Friend.objects.remove_friend(request.user, viewing)
+				Friend.objects.remove_friend(viewing, request.user)
 				return redirect('/dashboard')
 		else:
 			form = UnfriendForm()
@@ -102,9 +101,12 @@ def Profile(request, display_name):
 				friend_request = FriendshipRequest.objects.get(from_user=viewing, to_user=request.user)
 				friend_request.accept()
 				#Auto generate chatroom between users
-				room = ChatRoom(title = (viewing.display_name + 'to' + request.user.display_name))
+				room = ChatRoom(title='tempRoomName') #Very shitty idea here. Replace later
 				room.save()
+				room.title = str(room.pk)
+				print(room.pk)
 				room.users.add(request.user, viewing)
+				room.save()
 				return redirect('/dashboard')
 		else:
 			form = AcceptFriendRequestForm()

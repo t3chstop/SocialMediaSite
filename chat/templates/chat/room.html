@@ -15,7 +15,7 @@
                   <div>
                     <div class="box">     
                       <div id="chat-messages">
-                        {% for m in messages %} <img src='{{ m.user.profile_picture.url }}' width="45" height="45" style="border-radius: 50%;"> <b> {{ m.user.display_name }}</b>: {{ m.content }}<br>{% endfor %}
+                        {% for m in messages %} <img src='{{ m.user.profile_picture.url }}' width="42" height="42" style="border-radius: 50%; margin-bottom: 10px;"> <b> {{ m.user.display_name }}</b>: {{ m.content }}<br>{% endfor %}
                       </div>
                     </div>
       

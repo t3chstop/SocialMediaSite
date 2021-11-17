@@ -2,11 +2,12 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Message
 from asgiref.sync import sync_to_async
-from accounts.models import Account
 
 """
 TO DO: 
--Automatically generate chatrooms between friends when the friendship is created
+-Add field of authorized users to chatroom model(done)
+-Create redirect page if user is not authorized to view that room
+-Change direct message links to pk(mitigate security concerns)
 """
 
 

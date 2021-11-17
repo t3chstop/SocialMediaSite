@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Message, ChatRoom
@@ -10,18 +11,25 @@ def index(request):
 
 @login_required
 def room(request, room_name):
-    if not ChatRoom.objects.filter(title = room_name).exists():
-        room = ChatRoom(title=room_name)
-        room.save()
-        room.users.add(request.user)
-    displayName = request.user.display_name
-    messages = Message.objects.filter(room = room_name)
+    try:
+        room = ChatRoom.objects.get(title=room_name)
+    except:
+        return HttpResponse("That room does not exist")
+        
+    #Check if user is authorized to view room
+    if request.user in room.users.all():
+        displayName = request.user.display_name
+        messages = Message.objects.filter(room = room_name)
 
-    return render(request, 'chat/room.html', {
-        'room_name': room_name,
-        'displayName' : displayName,
-        'messages' : messages,
-    })
+        return render(request, 'chat/room.html', {
+            'room_name': room_name,
+            'displayName' : displayName,
+            'messages' : messages,
+        })
+    else:
+        return HttpResponse("You are not authorized to view this room")
+        
+
 
 def rooms(request):
     rooms = ChatRoom.objects.filter(users__display_name=request.user.display_name)

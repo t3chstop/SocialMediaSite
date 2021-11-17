@@ -6,6 +6,7 @@ from django.conf import settings
 class ChatRoom(models.Model):
     title = models.CharField(max_length=100, unique=True, blank=False)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+    id = models.BigAutoField(primary_key=True)
 
     def __str__(self):
         return self.title
