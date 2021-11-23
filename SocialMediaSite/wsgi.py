@@ -1,5 +1,5 @@
 """
-WSGI config for Social_Media_site project.
+WSGI config for SocialMediaSite project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Social_Media_site.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'SocialMediaSite.settings')
 
 application = get_wsgi_application()
