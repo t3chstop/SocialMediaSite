@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 
 #Get the user model
 UserModel = get_user_model()
@@ -23,3 +23,29 @@ class SetupForm(forms.ModelForm):
     class Meta:
         model = UserModel
         fields = ('profile_picture', 'bio')
+
+
+class LoginForm(forms.Form):
+    email = forms.CharField(label='Email')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+    class Meta:
+        model = UserModel
+        fields = ('email', 'password')
+
+    def clean(self):
+        if self.is_valid:
+            email = self.cleaned_data['email']
+            password = self.cleaned_data['password']
+            if not authenticate(email=email, password=password):
+                raise forms.ValidationError("Login Credentials not found")
+
+class UserSearchForm(forms.Form):
+    displayName = forms.CharField(max_length=30)
+
+    def clean(self):
+        entered_display_name = self.data['display_name']
+        try:
+            UserModel.objects.get(display_name=entered_display_name)
+        except:
+            raise forms.ValidationError("User not found")
