@@ -53,6 +53,11 @@ class Account(AbstractBaseUser):
         img.thumbnail(size)
         img.save(self.profile_picture.path)
 
+    #For admin site registration
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+    def has_module_perms(self, app_label):
+        return True  
 
     objects = CustomAccountManager()
 
