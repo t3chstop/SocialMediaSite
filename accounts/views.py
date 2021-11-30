@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm, UserSearchForm
 from friendship.models import Friend  # type: ignore
@@ -50,7 +51,7 @@ def login(request):
 		form = LoginForm()
 		return render(request, 'accounts/login.html', {'form': form})
 
-
+#Dashboard Page(home for logged in users)
 @login_required
 def dashboard(request):
 	pending_friend_requests = Friend.objects.unrejected_requests(user=request.user)
@@ -63,3 +64,8 @@ def dashboard(request):
 	else:
 		form = UserSearchForm()
 	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests})
+
+#Logout view, just logs user out and redirects
+def logout(request):
+	django_logout(request) #New name to prevent recursion
+	return redirect('/login')
