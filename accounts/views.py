@@ -1,12 +1,11 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm, UserSearchForm
-from friendship.models import Friend  # type: ignore
-from friendship.models import FriendshipRequest # type: ignore
-
+from friendship.models import Friend, FriendshipRequest  # type: ignore
+from .models import Account
 # Create your views here.
 
 #Home page when the site is first entered
@@ -43,7 +42,7 @@ def login(request):
 			password = request.POST['password']
 			user = authenticate(email=email, password=password)
 			if user:
-				login(request, user)
+				django_login(request, user)
 				return redirect('/dashboard')
 		else:
 			return HttpResponse("Login failed. Please try again")
@@ -69,3 +68,59 @@ def dashboard(request):
 def logout(request):
 	django_logout(request) #New name to prevent recursion
 	return redirect('/login')
+
+def profile(request, displayName):
+	"""
+	This view must handle a few different situations.
+	- If the person that is being viewed isn't a friend, allow them to
+	send a friend request
+	- If the person that is being viewed is a friend, allow them to remove
+	the friendship
+	- If viewing oneself, allow the user to edit their profile
+	"""
+
+	activeRequestTo = False
+	activeRequestFrom = False
+	areFriends = False
+	viewingSelf = False
+
+	try:
+		displayed_user = Account.objects.get(displayName=displayName)
+	except:
+		return HttpResponse("404. User not found")
+
+
+	if request.user==displayed_user:
+		viewingSelf = True
+		return render(request, 'accounts/profile.html', 
+		{
+			'viewingName' : request.user.displayName,
+			'areFriends' : areFriends, 
+			'activeRequestTo' : activeRequestTo, 
+			'activeRequestFrom':activeRequestFrom,
+			'viewingSelf' : viewingSelf,
+		})
+
+	#Check if user is friends already
+
+	areFriends = Friend.objects.are_friends(request.user, displayed_user)
+
+	try:
+		activeRequestTo = FriendshipRequest.objects.get(to_user=request.user, from_user=displayed_user).exists()
+	except:
+		pass
+
+	try:
+		activeRequestFrom = FriendshipRequest.objects.get(to_user=displayed_user, from_user=request.user).exists()
+	except:
+		pass
+
+	return render(request, 'accounts/profile.html', 
+		{
+			'viewingName' : displayed_user.displayName,
+			'areFriends' : areFriends, 
+			'activeRequestTo' : activeRequestTo, 
+			'activeRequestFrom':activeRequestFrom,
+			'viewingSelf' : viewingSelf,
+		})
+

@@ -29,10 +29,6 @@ class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
-    class Meta:
-        model = UserModel
-        fields = ('email', 'password')
-
     def clean(self):
         if self.is_valid:
             email = self.cleaned_data['email']
@@ -44,7 +40,7 @@ class UserSearchForm(forms.Form):
     displayName = forms.CharField(max_length=30)
 
     def clean(self):
-        entered_display_name = self.data['display_name']
+        entered_display_name = self.data['displayName']
         try:
             UserModel.objects.get(display_name=entered_display_name)
         except:
