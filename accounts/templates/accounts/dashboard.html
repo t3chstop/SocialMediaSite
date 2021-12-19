@@ -14,6 +14,17 @@
     <div class="container-fluid">
       <h1>You are logged in</h1>
 
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <button type="submit">Search for User</button>
+
+    <p>
+      {% for i in pending_friend_requests %}
+          <a href="/profile/{{ i }}">{{ i }}</a>
+      {% endfor %}
+    </p>
+
       <a href="/logout"><p>Logout</p></a>
     </div>
 

@@ -69,6 +69,7 @@ def logout(request):
 	django_logout(request) #New name to prevent recursion
 	return redirect('/login')
 
+#Profile view
 def profile(request, displayName):
 	"""
 	This view must handle a few different situations.
