@@ -54,15 +54,16 @@ def login(request):
 @login_required
 def dashboard(request):
 	pending_friend_requests = Friend.objects.unrejected_requests(user=request.user)
+	displayName = request.user.displayName
 	#I don't know how to do this without a form. Perhaps there is a better way with JS
 	if request.method == 'POST':
 		form = UserSearchForm(request.POST)
 		if form.is_valid():
-			user_entered_displayname = request.POST['display_name']
+			user_entered_displayname = request.POST['displayName']
 			return redirect(f'/profile/{user_entered_displayname}')
 	else:
 		form = UserSearchForm()
-	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests})
+	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests, 'displayName':displayName})
 
 #Logout view, just logs user out and redirects
 def logout(request):
@@ -109,7 +110,14 @@ def profile(request, displayName):
 	try:
 		activeRequestTo = FriendshipRequest.objects.get(to_user=request.user, from_user=displayed_user).exists()
 	except:
-		pass
+		return render(request, 'accounts/profile.html', 
+		{
+			'viewingName' : displayed_user.displayName,
+			'areFriends' : areFriends, 
+			'activeRequestTo' : activeRequestTo, 
+			'activeRequestFrom':activeRequestFrom,
+			'viewingSelf' : viewingSelf,
+		})
 
 	try:
 		activeRequestFrom = FriendshipRequest.objects.get(to_user=displayed_user, from_user=request.user).exists()

@@ -14,6 +14,32 @@
     <div class="container-fluid">
       <h1>{{viewingName}}</h1>
 
+      {% if areFriends %}
+
+      <p>You're viewing your friend</p>
+      <!-- put remove friends form here -->
+
+      {% elif activeRequestTo %}
+
+      <p>Friend Request Delivered. Awaiting response</p>
+
+      {% elif activeRequestFrom %}
+
+      <p>Incoming friend request</p>
+      <!-- put accept friend request form here -->
+
+      {% elif viewingSelf %}
+
+      <!-- put edit profile form here -->
+
+      <p>Viewing yourself</p>
+
+      {% else %}
+
+      <p>Send a friend request</p>
+      <!-- put edit profile form here -->
+
+      {% endif %}
 
 
       <a href="/logout"><p>Logout</p></a>

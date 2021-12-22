@@ -42,6 +42,6 @@ class UserSearchForm(forms.Form):
     def clean(self):
         entered_display_name = self.data['displayName']
         try:
-            UserModel.objects.get(display_name=entered_display_name)
+            UserModel.objects.get(displayName=entered_display_name)
         except:
             raise forms.ValidationError("User not found")
