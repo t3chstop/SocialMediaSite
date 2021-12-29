@@ -40,6 +40,7 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    #profile picture only accepts null and blank so that i don't have to redo old accounts if i screw up during development
     profile_picture = models.ImageField(blank=True, upload_to='profile_pictures', null=True, default=r'profile_pictures/default.png')
     bio = models.TextField(blank=True, max_length=700)
     hide_email = models.BooleanField(default=True)

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, LoginForm, UserSearchForm
+from .forms import RegistrationForm, LoginForm, UserSearchForm, SetupForm
 from friendship.models import Friend, FriendshipRequest  # type: ignore
 from .models import Account
 # Create your views here.
@@ -24,7 +24,7 @@ def register(request):
 			email = form.cleaned_data.get('email')
 			raw_password = form.cleaned_data.get('password1')
 			user = authenticate(email=email, password=raw_password)
-			login(request, user)
+			django_login(request, user)
 			return redirect('/setup')
 	else:
 		form = RegistrationForm()
@@ -65,6 +65,17 @@ def dashboard(request):
 		form = UserSearchForm()
 	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests, 'displayName':displayName})
 
+#Setup page(One time after registration)
+def setup(request):
+	if request.method == 'POST':
+		form = SetupForm(request.POST, request.FILES, instance=request.user)
+		if form.is_valid():
+			form.save()
+			return redirect('/dashboard')	
+	else:
+		form = SetupForm()
+	return render(request, 'accounts/setup.html', {'form': form})
+
 #Logout view, just logs user out and redirects
 def logout(request):
 	django_logout(request) #New name to prevent recursion
@@ -96,6 +107,7 @@ def profile(request, displayName):
 		viewingSelf = True
 		return render(request, 'accounts/profile.html', 
 		{
+			'displayed_user' : displayed_user,
 			'viewingName' : request.user.displayName,
 			'areFriends' : areFriends, 
 			'activeRequestTo' : activeRequestTo, 
