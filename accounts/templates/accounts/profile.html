@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -21,7 +22,8 @@
       {% if areFriends %}
 
       <p>You're viewing your friend</p>
-      <!-- put remove friends form here -->
+      <input type="submit" value="Remove Friendship" name ="remove_friends_form">
+      <input type="submit" value="Block" name ="block_form">
 
       {% elif activeRequestTo %}
 
@@ -30,18 +32,20 @@
       {% elif activeRequestFrom %}
 
       <p>Incoming friend request</p>
-      <!-- put accept friend request form here -->
+      <input type="submit" value="Accept Friend Request" name ="accept_friend_form">
+      <input type="submit" value="Reject Friend Request" name ="reject_friend_form">
+      <input type="submit" value="Block" name ="block_form">
 
       {% elif viewingSelf %}
 
-      <!-- put edit profile form here -->
-
       <p>Viewing yourself</p>
+      <input type="submit" value="Edit Profile" name ="edit_profile_form">
 
       {% else %}
 
       <p>Send a friend request</p>
-      <!-- put edit profile form here -->
+      <input type="submit" value="Send Friend Request" name ="send_request_form">
+      <input type="submit" value="Block" name ="block_form">
 
       {% endif %}
 

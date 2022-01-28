@@ -4,7 +4,7 @@ from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegistrationForm, LoginForm, UserSearchForm, SetupForm
-from friendship.models import Friend, FriendshipRequest  # type: ignore
+from friendship.models import Friend, FriendshipRequest, Block  # type: ignore
 from .models import Account
 # Create your views here.
 
@@ -136,6 +136,30 @@ def profile(request, displayName):
 	except:
 		pass
 
+	if 'send_request_form' in request.POST:
+		#Check if request.user is blocked by other user
+		if Block.objects.is_blocked(request.user, displayed_user):
+			return HttpResponse("this person has blocked you")
+		Friend.objects.add_friend(request.user, displayed_user)
+		return HttpResponse('test')
+
+	if 'accept_friend_form' in request.POST:
+		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
+		friend_request.accept() 
+
+	if 'reject_friend_form' in request.POST:
+		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
+		friend_request.reject()
+
+	if 'remove_friends_form' in request.POST:
+		Friend.objects.remove_friend(request.user, displayed_user)
+	
+	if 'block_form' in request.POST:
+		Block.objects.add_block(request.user, displayed_user)
+
+	if 'unblock_form' in request.POST:
+		Block.objects.remove_block(request.user, displayed_user)
+
 	return render(request, 'accounts/profile.html', 
 		{
 			'viewingName' : displayed_user.displayName,
@@ -144,4 +168,6 @@ def profile(request, displayName):
 			'activeRequestFrom':activeRequestFrom,
 			'viewingSelf' : viewingSelf,
 		})
+
+
 
