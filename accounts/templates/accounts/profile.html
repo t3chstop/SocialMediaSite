@@ -22,24 +22,38 @@
       {% if areFriends %}
 
       <p>You're viewing your friend</p>
-      <input type="submit" value="Remove Friendship" name ="remove_friends_form">
-      <input type="submit" value="Block" name ="block_form">
-
-      {% elif activeRequestTo %}
-
-      <p>Friend Request Delivered. Awaiting response</p>
+      
+      <form action="#" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Remove Friendship" name ="remove_friends_form">
+        <input type="submit" value="Block" name ="block_form">
+      </form>
+      
 
       {% elif activeRequestFrom %}
 
+      <p>Friend Request Delivered. Awaiting response</p>
+
+      {% elif activeRequestTo %}
+
       <p>Incoming friend request</p>
-      <input type="submit" value="Accept Friend Request" name ="accept_friend_form">
-      <input type="submit" value="Reject Friend Request" name ="reject_friend_form">
-      <input type="submit" value="Block" name ="block_form">
+      
+
+      <form action="#" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Accept Friend Request" name ="accept_friend_form">
+        <input type="submit" value="Reject Friend Request" name ="reject_friend_form">
+        <input type="submit" value="Block" name ="block_form">
+      </form>
 
       {% elif viewingSelf %}
 
       <p>Viewing yourself</p>
-      <input type="submit" value="Edit Profile" name ="edit_profile_form">
+      
+      <form action="#" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Edit Profile" name ="edit_profile_form">
+      </form>
 
       {% else %}
 

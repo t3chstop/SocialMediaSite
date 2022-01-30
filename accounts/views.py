@@ -149,8 +149,23 @@ def profile(request, displayName):
 	areFriends = Friend.objects.are_friends(request.user, displayed_user)
 
 	try:
-		activeRequestTo = FriendshipRequest.objects.get(to_user=request.user, from_user=displayed_user).exists()
+		placeholder = FriendshipRequest.objects.get(to_user=request.user, from_user=displayed_user)
+		activeRequestTo = True
+		return render(request, 'accounts/profile.html', 
+				{
+					'viewingName' : displayed_user.displayName,
+					'areFriends' : areFriends, 
+					'activeRequestTo' : activeRequestTo, 
+					'activeRequestFrom':activeRequestFrom,
+					'viewingSelf' : viewingSelf,
+				})
 	except:
+		pass
+		
+
+	try:
+		placeholder = FriendshipRequest.objects.get(to_user=displayed_user, from_user=request.user)
+		activeRequestFrom = True
 		return render(request, 'accounts/profile.html', 
 		{
 			'viewingName' : displayed_user.displayName,
@@ -159,9 +174,6 @@ def profile(request, displayName):
 			'activeRequestFrom':activeRequestFrom,
 			'viewingSelf' : viewingSelf,
 		})
-
-	try:
-		activeRequestFrom = FriendshipRequest.objects.get(to_user=displayed_user, from_user=request.user).exists()
 	except:
 		pass
 
