@@ -37,7 +37,7 @@ def login(request):
 		return redirect('/dashboard')
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
-		if form.is_valid():
+		if form.is_valid(): 
 			email = request.POST['email']
 			password = request.POST['password']
 			user = authenticate(email=email, password=password)
@@ -54,6 +54,10 @@ def login(request):
 @login_required
 def dashboard(request):
 	pending_friend_requests = Friend.objects.unrejected_requests(user=request.user)
+	requestNames = []
+	for i in pending_friend_requests:
+		requestNames.append(i.from_user.displayName)
+	
 	displayName = request.user.displayName
 	#I don't know how to do this without a form. Perhaps there is a better way with JS
 	if request.method == 'POST':
@@ -63,7 +67,7 @@ def dashboard(request):
 			return redirect(f'/profile/{user_entered_displayname}')
 	else:
 		form = UserSearchForm()
-	return render(request, 'accounts/dashboard.html', {'form': form, 'pending_friend_requests':pending_friend_requests, 'displayName':displayName})
+	return render(request, 'accounts/dashboard.html', {'form': form, 'requestNames':requestNames, 'displayName':displayName})
 
 #Setup page(One time after registration)
 def setup(request):
@@ -102,6 +106,31 @@ def profile(request, displayName):
 	except:
 		return HttpResponse("404. User not found")
 
+	
+	if 'send_request_form' in request.POST:
+		#Check if request.user is blocked by other user
+		if Block.objects.is_blocked(request.user, displayed_user):
+			return HttpResponse("this person has blocked you")
+		Friend.objects.add_friend(request.user, displayed_user)
+		return HttpResponse('test')
+
+	if 'accept_friend_form' in request.POST:
+		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
+		friend_request.accept() 
+
+	if 'reject_friend_form' in request.POST:
+		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
+		friend_request.reject()
+
+	if 'remove_friends_form' in request.POST:
+		Friend.objects.remove_friend(request.user, displayed_user)
+	
+	if 'block_form' in request.POST:
+		Block.objects.add_block(request.user, displayed_user)
+
+	if 'unblock_form' in request.POST:
+		Block.objects.remove_block(request.user, displayed_user)
+
 
 	if request.user==displayed_user:
 		viewingSelf = True
@@ -136,29 +165,9 @@ def profile(request, displayName):
 	except:
 		pass
 
-	if 'send_request_form' in request.POST:
-		#Check if request.user is blocked by other user
-		if Block.objects.is_blocked(request.user, displayed_user):
-			return HttpResponse("this person has blocked you")
-		Friend.objects.add_friend(request.user, displayed_user)
-		return HttpResponse('test')
-
-	if 'accept_friend_form' in request.POST:
-		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
-		friend_request.accept() 
-
-	if 'reject_friend_form' in request.POST:
-		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)
-		friend_request.reject()
-
-	if 'remove_friends_form' in request.POST:
-		Friend.objects.remove_friend(request.user, displayed_user)
 	
-	if 'block_form' in request.POST:
-		Block.objects.add_block(request.user, displayed_user)
 
-	if 'unblock_form' in request.POST:
-		Block.objects.remove_block(request.user, displayed_user)
+	
 
 	return render(request, 'accounts/profile.html', 
 		{

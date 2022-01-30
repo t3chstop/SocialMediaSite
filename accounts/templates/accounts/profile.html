@@ -44,8 +44,13 @@
       {% else %}
 
       <p>Send a friend request</p>
-      <input type="submit" value="Send Friend Request" name ="send_request_form">
-      <input type="submit" value="Block" name ="block_form">
+      
+
+      <form action="#" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Send Friend Request" name ="send_request_form">
+        <input type="submit" value="Block" name ="block_form">
+      </form>
 
       {% endif %}
 
