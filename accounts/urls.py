@@ -19,4 +19,5 @@ urlpatterns = [
     path('logout/', views.logout, name="logout"),
     path('profile/<displayName>/', views.profile, name="profile"),
     path('setup/', views.setup, name="setup"),
+    path('edit-profile', views.edit_profile, name="edit profile")
 ]

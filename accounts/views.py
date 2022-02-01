@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as django_login, authenticate
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, LoginForm, UserSearchForm, SetupForm
+from .forms import RegistrationForm, LoginForm, UserSearchForm, SetupForm, EditProfileForm
 from friendship.models import Friend, FriendshipRequest, Block  # type: ignore
 from .models import Account
 # Create your views here.
@@ -84,6 +84,21 @@ def setup(request):
 def logout(request):
 	django_logout(request) #New name to prevent recursion
 	return redirect('/login')
+
+#Page where logged in user edits their profile
+def edit_profile(request):
+	if request.method == 'POST':
+		form = EditProfileForm(request.POST)
+		form.actual_user = request.user
+		if form.is_valid():
+			form.save()
+			return redirect('/dashboard')
+	else:
+		form = EditProfileForm()
+		form.fields['displayName'].widget.attrs['placeholder']=request.user.displayName
+		form.fields['email'].widget.attrs['placeholder']=request.user.email
+		form.fields['bio'].widget.attrs['placeholder']=request.user.bio
+	return render(request, 'accounts/edit-profile.html', {'form': form,})
 
 #Profile view
 def profile(request, displayName):

@@ -50,10 +50,7 @@
 
       <p>Viewing yourself</p>
       
-      <form action="#" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Edit Profile" name ="edit_profile_form">
-      </form>
+      <a href="/edit-profile">Edit your profile</a>
 
       {% else %}
 

@@ -1,3 +1,4 @@
+from pickle import TRUE
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, authenticate
@@ -45,3 +46,20 @@ class UserSearchForm(forms.Form):
             UserModel.objects.get(displayName=entered_display_name)
         except:
             raise forms.ValidationError("User not found")
+
+class EditProfileForm(forms.ModelForm):
+    displayName = forms.CharField(required=False)
+    email = forms.EmailField(required=False)
+    profile_picture = forms.ImageField(required=False)
+    bio = forms.CharField(max_length=700, required=False)
+
+    class Meta:
+        model = UserModel
+        fields = ('displayName', 'email', 'profile_picture', 'bio')
+
+    def save(self, commit=True):
+        user = super(RegistrationForm, self).save(commit=False)
+        if commit:
+            user.save()
+
+        return user
