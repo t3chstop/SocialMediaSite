@@ -36,6 +36,8 @@ AUTHENTICATION_BACKENDS = (
 # Application definition
 
 INSTALLED_APPS = [
+    'chat',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -138,3 +140,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+#ASGI Application to support websocket and other protocols
+ASGI_APPLICATION = 'mysite.asgi.application'
