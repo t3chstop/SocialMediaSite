@@ -1,3 +1,4 @@
+from email import message
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as django_login, authenticate
@@ -91,6 +92,12 @@ def edit_profile(request):
 		form = EditProfileForm(request.POST, instance=request.user)
 		form.actual_user = request.user
 		if form.is_valid():
+			if not form.data['displayName']:
+				form.data['displayName'] = request.user.displayName
+			if not form.data['email']:
+				form.data['email'] = request.user.email
+			if not form.data['bio']:
+				form.data['bio'] = request.user.bio
 			form.save()
 			return redirect('/dashboard')
 	else:
@@ -126,8 +133,8 @@ def profile(request, displayName):
 		#Check if request.user is blocked by other user
 		if Block.objects.is_blocked(request.user, displayed_user):
 			return HttpResponse("this person has blocked you")
-		Friend.objects.add_friend(request.user, displayed_user)
-		return HttpResponse('test')
+		Friend.objects.add_friend(request.user, displayed_user, message=request.POST["send_request_form_text"])
+		return redirect('/dashboard')
 
 	if 'accept_friend_form' in request.POST:
 		friend_request = FriendshipRequest.objects.get(from_user=displayed_user, to_user=request.user)

@@ -60,6 +60,7 @@
       <form action="#" method="post">
         {% csrf_token %}
         <input type="submit" value="Send Friend Request" name ="send_request_form">
+        <input type="text" placeholder="Hi, I'd like to add you as a friend" name ="send_request_form_text">
         <input type="submit" value="Block" name ="block_form">
       </form>
 

@@ -1,7 +1,8 @@
-from pickle import TRUE
+from email.policy import default
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model, authenticate
+from friendship.models import Friend, FriendshipRequest, Block  # type: ignore
 
 #Get the user model
 UserModel = get_user_model()
@@ -46,7 +47,7 @@ class UserSearchForm(forms.Form):
             UserModel.objects.get(displayName=entered_display_name)
         except:
             raise forms.ValidationError("User not found")
-
+ 
 class EditProfileForm(forms.ModelForm):
     displayName = forms.CharField(required=False)
     email = forms.EmailField(required=False)
