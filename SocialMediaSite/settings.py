@@ -142,4 +142,4 @@ LOGIN_URL = '/login'
 AUTH_USER_MODEL = 'accounts.Account'
 
 #ASGI Application to support websocket and other protocols
-ASGI_APPLICATION = 'mysite.asgi.application'
+ASGI_APPLICATION = 'SocialMediaSite.asgi.application'
