@@ -56,10 +56,3 @@ class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserModel
         fields = ('displayName', 'email', 'profile_picture', 'bio')
-
-    def save(self, commit=True):
-        user = super(RegistrationForm, self).save(commit=False)
-        if commit:
-            user.save()
-
-        return user
