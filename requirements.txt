@@ -1,0 +1,4 @@
+channels==3.0.4
+Django==3.2.9
+django_friendship==1.9.4
+Pillow==9.0.1
