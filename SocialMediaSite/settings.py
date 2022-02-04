@@ -143,3 +143,13 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 #ASGI Application to support websocket and other protocols
 ASGI_APPLICATION = 'SocialMediaSite.asgi.application'
+
+#Channel layers to support redis
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
