@@ -5,7 +5,7 @@ from django.conf import settings
 # Create your models here.
 class ChatRoom(models.Model):
     name = models.CharField(max_length=100, unique=False, blank=False)
-    user = models.ManyToManyField()
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     key = models.BigAutoField(primary_key=True)
 
     def __str__(self):
