@@ -9,7 +9,7 @@ class ChatRoom(models.Model):
     key = models.BigAutoField(primary_key=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Message(models.Model):
