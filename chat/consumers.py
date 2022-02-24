@@ -2,13 +2,13 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Message, ChatRoom
 from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
 	async def connect(self):
 		self.room_name = self.scope['url_route']['kwargs']['room_name']
 		self.room_group_name = 'chat_%s' % self.room_name
-		self.roomobj = sync_to_async(ChatRoom.objects.get)(name=self.room_name)
 
 		# Join room group
 		await self.channel_layer.group_add(
@@ -29,9 +29,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
-		print('reached')
-		await self._save_message(room_=self.roomobj, content_=message, user_=self.scope['user'])
-		print('here')
+		await self.save_message(self.scope['user'], self.room_name, message)
+		
 		# Send message to room group
 		await self.channel_layer.group_send(
 			self.room_group_name,
@@ -41,9 +40,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			}
 		)
 
-	def _save_message(room_, content_, user_):
-		Message.objects.create(room=room_, message=content_, user=user_)
-		print('reached2')
+	@database_sync_to_async
+	def save_message(self, user, roomkey, content):
+		room = ChatRoom.objects.get(pk=roomkey)
+		msg = Message.objects.create(user=user, room=room, content=content)
+		msg.save()
+
+
+	
 
 	# Receive message from room group
 	async def chat_message(self, event):
