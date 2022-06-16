@@ -12,7 +12,7 @@ class ChatRoomAdmin(admin.ModelAdmin):
         model = ChatRoom
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('room', 'user', 'timestamp', 'content')
+    list_display = ('content', 'room', 'user', 'timestamp', )
     list_filter = ['room',  'user', "timestamp"]
     search_fields = ('content', 'room')
 
