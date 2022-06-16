@@ -31,8 +31,9 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
+            console.log(data.profile_path);
             document.querySelector('#chat-log').innerHTML += ("<img src= " + (data.profile_path) + " width='50' height='50'>");
-            document.querySelector('#chat-log').innerHTML += "<p>" + (data.message) + "</p>" + '\n';
+            document.querySelector('#chat-log').innerHTML += "<p>" + (data.message) + "</p>" + '<br>';
             
         };
 

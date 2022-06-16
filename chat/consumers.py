@@ -59,5 +59,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		message = event['message']
 		# Send message to WebSocket
 		await self.send(text_data=json.dumps({
-			'message': message
+			'type': 'chat_message',
+			'message': message,
+			'profile_path' : self.scope['user'].profile_picture.url
 		}))
