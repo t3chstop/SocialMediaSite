@@ -89,7 +89,7 @@ def logout(request):
 #Page where logged in user edits their profile
 def edit_profile(request):
 	if request.method == 'POST':
-		form = EditProfileForm(request.POST, instance=request.user)
+		form = EditProfileForm(request.POST, request.FILES, instance=request.user)
 		form.actual_user = request.user
 		if form.is_valid():
 			if not form.data['displayName']:
@@ -98,6 +98,7 @@ def edit_profile(request):
 				form.data['email'] = request.user.email
 			if not form.data['bio']:
 				form.data['bio'] = request.user.bio
+			print(form.data)
 			form.save()
 			return redirect('/dashboard')
 	else:
