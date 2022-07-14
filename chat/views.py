@@ -30,6 +30,9 @@ def room(request, room_name):
 		chatroom = ChatRoom.objects.get(key=room_name)
 	except:
 		return HttpResponse("Room doesn't exist")
+	
+	if (request.user not in chatroom.users.all()):
+		return HttpResponse("You are not authorized to see this room")
 
 	roomset = ChatRoom.objects.all()
 	userrooms = []
