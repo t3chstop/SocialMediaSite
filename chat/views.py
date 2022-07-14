@@ -1,3 +1,4 @@
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from .forms import CreateChatRoomForm
 from .models import ChatRoom
@@ -13,7 +14,7 @@ def index(request):
 			try:
 				room = ChatRoom.objects.get(name=form.data['name'])
 				return redirect('/chat/ws/' + str(room.key))
-			except ChatRoom.DoesNotExist:
+			except:
 				newroom = ChatRoom(name=form.data['name'])
 				newroom.save()
 				newroom.users.add(request.user)
@@ -25,6 +26,17 @@ def index(request):
 #Room
 @login_required
 def room(request, room_name):
+	try:
+		chatroom = ChatRoom.objects.get(key=room_name)
+	except:
+		return HttpResponse("Room doesn't exist")
+
+	roomset = ChatRoom.objects.all()
+	userrooms = []
+	for room in roomset.iterator():
+		if request.user in room.users.all():
+			userrooms.append(room)
+		
 	return render(request, 'chat/room.html', {
-		'room_name': room_name
+		'room_name': room_name, 'userrooms' : userrooms,
 	})

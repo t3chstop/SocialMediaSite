@@ -92,20 +92,11 @@ def edit_profile(request):
 		form = EditProfileForm(request.POST, request.FILES, instance=request.user)
 		form.actual_user = request.user
 		if form.is_valid():
-			if not form.data['displayName']:
-				form.data['displayName'] = request.user.displayName
-			if not form.data['email']:
-				form.data['email'] = request.user.email
-			if not form.data['bio']:
-				form.data['bio'] = request.user.bio
 			print(form.data)
 			form.save()
 			return redirect('/dashboard')
 	else:
-		form = EditProfileForm()
-		form.fields['displayName'].widget.attrs['placeholder']=request.user.displayName
-		form.fields['email'].widget.attrs['placeholder']=request.user.email
-		form.fields['bio'].widget.attrs['placeholder']=request.user.bio
+		form = EditProfileForm(initial={'displayName': request.user.displayName, 'email' : request.user.email, 'bio' : request.user.bio,})
 	return render(request, 'accounts/edit-profile.html', {'form': form,})
 
 #Profile view

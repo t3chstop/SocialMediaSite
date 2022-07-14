@@ -10,10 +10,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		self.room_name = self.scope['url_route']['kwargs']['room_name']
 		self.room_group_name = 'chat_%s' % self.room_name
 
-		#Check if user is authorized
-		# thisroom = database_sync_to_async(ChatRoom.objects.get)(pk=self.room_name)
-		# if not self.scope['user'] in thisroom.users:
-		# 	pass
 		# Join room group
 		await self.channel_layer.group_add(
 			self.room_group_name,
