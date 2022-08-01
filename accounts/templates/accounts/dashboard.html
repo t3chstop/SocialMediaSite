@@ -1,22 +1,90 @@
-{% extends 'base.html' %} 
+{% extends 'accounts/base.html' %} 
+{% load static %}
 
 {% block title %} Dashboard | SocialMediaSite {% endblock title %}
 
-{% block content %}
+{% block header %}
+<nav class="navbar navbar-expand-lg" style="background-color: #141824;">
   <div class="container-fluid">
-    <h1>Welcome, {{displayName}}</h1>
-
-  <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-  <button type="submit">Search for User</button>
-
-  <p>
-    {% for i in requestNames %}
-        <a href="/profile/{{ i }}">{{ i }}</a>
-    {% endfor %}
-  </p>
-
-    <a href="/logout"><p>Logout</p></a>
+    <a class="navbar-brand" href="#" style="color: #FFB600;">SocialMediaSite</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/" style="color: white;">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/chat/" style="color: white;">Chat</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/" style="color: white;">Admin</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item logout-button">
+            <a class="nav-link" href="/logout/" style="color: white;">Logout</a>
+        </li>
+    </ul>
+    </div>
   </div>
+</nav>
+{% endblock header %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="header" style="padding-top: 2%; background-color: #141824; margin-bottom: 2%;">
+      <h1>Welcome, {{displayName}}</h1>
+    </div>
+    <div class="col-1">
+      
+    </div>
+    <div class="col-3 solid-box">
+        <h3>Search For User</h3>
+        <form method="post" style="padding-bottom: 2%;">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Search for User</button>
+        </form>
+    </div>
+    <div class="col-1">
+
+    </div>
+    <div class="col-3 solid-box">
+      <h3>Active Chatrooms</h3>
+    </div>
+    <div class="col-1">
+      
+    </div>
+    <div class="col-2 solid-box">
+      <h3>Incoming Friend Requests</h3>
+      <p>
+        {% for i in requestNames %}
+            <a href="/profile/{{ i }}">{{ i }}</a>
+        {% endfor %}
+      </p>
+    </div>
+    <div class="col-1">
+      
+    </div>
+  </div>
+</div>
+
+<canvas class="background" style="top: 0;"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="{% static 'accounts/particles.min.js' %}"></script>
+<script>
+  window.onload = function() {
+    Particles.init({
+      selector: '.background',
+      connectParticles: true,
+      color: '#0049FF',
+    });
+  };
+</script>
+
+
 {% endblock content %}

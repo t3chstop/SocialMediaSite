@@ -1,15 +1,43 @@
-{% extends 'base.html' %} 
+{% extends 'accounts/base.html' %} 
+{% load static %}
 
 {% block title %} Register | SocialMediaSite {% endblock title %}
 
 {% block content %}
 <div class="container-fluid">
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-  </form>
-  <p><a href="/login">Already have an account? Log in</a></p>
+  <div class="hero" style="background-color: #141824;">
+    <div class="row" style="margin-top: 2%;">
+      <h1 style="margin-bottom: 2%;">SocialMediaSite by T3chstop</h1>
+      <div class="col-3">
+        
+      </div>
+      <div class="col-6 solid-box">
+          <h3>Register</h3>
+          <form method="post" style="padding-bottom: 2%;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+          </form>
+          <h4>Already have an account? <a href="/login/">Log in</a></h4>
+      </div>
+      <div class="col-3">
+
+      </div>
+    </div>
+  </div>
 </div>
+
+<canvas class="background"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="{% static 'accounts/particles.min.js' %}"></script>
+<script>
+  window.onload = function() {
+    Particles.init({
+      selector: '.background',
+      connectParticles: true,
+      color: '#0049FF',
+    });
+  };
+</script>
 {% endblock content %}

@@ -9,13 +9,19 @@ UserModel = get_user_model()
 
 class RegistrationForm(UserCreationForm):
     context = {}
-    email = forms.EmailField(max_length=255, help_text="You will log in with this")
-    displayName = forms.CharField(max_length=300, help_text="This name will appear with your public profile")
+    email = forms.EmailField(max_length=255)
+    displayName = forms.CharField(max_length=300)
     
 
     class Meta:
         model = UserModel
         fields = ('email', 'displayName', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ['password1', 'password2']:
+            self.fields[fieldname].help_text = None
 
 class SetupForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)

@@ -11,7 +11,22 @@ from .models import Account
 
 #Home page when the site is first entered
 def index(request):
-	return render(request, 'accounts/index.html')
+	if request.user.is_authenticated:
+		return redirect('/dashboard')
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid(): 
+			email = request.POST['email']
+			password = request.POST['password']
+			user = authenticate(email=email, password=password)
+			if user:
+				django_login(request, user)
+				return redirect('/dashboard')
+		else:
+			return HttpResponse("Login failed. Please try again")
+	else:
+		form = LoginForm()
+		return render(request, 'accounts/index.html', {'form': form})
 
 #Sign up page
 def register(request):
